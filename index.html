@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Merry Christmas</title>
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <script src="pixi.min.js"></script>
+    <script>
+        var width = document.body.scrollWidth,
+            height = document.body.scrollHeight,
+            stage = new PIXI.Container(),
+            renderer = PIXI.autoDetectRenderer(width, height, { backgroundColor: 0x1099bb });
+        document.body.appendChild(renderer.view);
+
+        PIXI.loader
+        .add("images/candy1.png")
+        .add("images/candy2.png")
+        .add("images/candy3.png")
+        .add("images/candy4.png")
+        .add("images/candy5.png")
+        .add("images/candy6.png")
+        .add("images/candy7.png")
+        .load(setup);
+
+        function setup() {
+            var gift = 1;
+            setInterval(function () {
+                if (gift < 51) {
+                    var spriteNum = Math.floor(Math.random() * 7 + 1);
+                    //create a sprite
+                    var sprite = new PIXI.Sprite(PIXI.loader.resources["images/candy" + spriteNum + ".png"].texture);
+
+                    // move the sprite to the center of the screen
+                    sprite.position.x = Math.floor(Math.random() * width);
+
+                    sprite.rotation = (Math.random() * -2 + 1).toFixed(1);
+
+                    //add sprite to stage
+                    stage.addChild(sprite);
+                    gift += 1;
+
+                    //call animate
+                    animate();
+
+                    function animate() {
+                        if (sprite.transform) {
+                            requestAnimationFrame(animate);
+                            var speed = Math.floor(Math.random() * 4 + 4);
+                            sprite.y += speed;
+                            if (sprite.y >= height) {
+                                sprite.destroy();
+                                stage.removeChild(sprite);
+                                gift -= 1;
+                            }
+                            renderer.render(stage);
+                        }
+                    }
+                }
+            }, 200);
+        }
+    </script>
+</body>
+</html>
